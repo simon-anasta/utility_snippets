@@ -1,0 +1,13 @@
+name,x,y,shape,label,col,boxw
+B15,10,5000,rectangle,B15,darkgreen,2
+B16,20,5000,rectangle,B16,darkgreen,2
+B17,30,5000,rectangle,B17,darkgreen,2
+D15,10,1000,rectangle,D15,black,2
+D16,20,1000,rectangle,D16,black,2
+D17,30,1000,rectangle,D17,black,2
+E15,10,4000,rectangle,E15,blue,2
+E16,20,4000,rectangle,E16,blue,2
+E17,30,4000,rectangle,E17,blue,2
+S15,10,2000,rectangle,S15,orange,2
+S16,20,2000,rectangle,S16,orange,2
+S17,30,2000,rectangle,S17,orange,2
