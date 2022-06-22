@@ -1,0 +1,80 @@
+---
+title: "Title here"
+subtitle: "Subtitle here"
+author: "Firstname Lastname"
+output:
+  html_document:
+    theme: cerulean
+    toc: yes
+    toc_depth: 3
+    toc_float:
+      collapsed: true
+      smooth_scroll: false
+    number_sections: false
+  pdf_document:
+    toc: yes
+    toc_depth: '3'
+  word_document: default
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(cache = TRUE, warning = FALSE, 
+                      message = FALSE, cache.lazy = FALSE)
+```
+
+```{r message = FALSE, error = FALSE, echo = FALSE, cache = TRUE}
+require(knitr) # general purpose tool for dynamic report generation
+require(dplyr)
+# require(haven) # imports SPSS, Stata, and SAS files
+# require(tidyr)
+# require(stringr)
+# require(tidyverse)
+# require(plotly)
+require(ggplot2)
+# require(lubridate) # handle dates
+```
+
+### Heading 1
+
+Explanatory text goes here
+
+### Heading 2
+
+Further text
+
+```{r message = FALSE, error = FALSE, echo = FALSE, warning = FALSE, include = FALSE, cache = TRUE}
+# source all input scripts here
+```
+
+### Plots {.tabset .tabset-fade .tabset-pills}
+
+```{r echo = FALSE, results = "asis", cache = TRUE, message = FALSE, error = FALSE, warning = FALSE}
+
+data(mtcars)
+col_options = c("mpg", "disp", "hp", "drat", "wt")
+
+## loop through each option, creating graphs each time -------------------------
+for (ii in seq_along(col_options)){
+  
+  this_col = col_options[ii]
+  other_cols = col_options[! col_options == this_col]
+  
+  # plotting function
+  plot_vars = function(x, y){
+    ggplot(data = mtcars) +
+      geom_point(aes(x = !!sym(x), y = !!sym(y)))
+  }
+  
+  # produce all plots
+  plot_list = lapply(other_cols, plot_vars, x = this_col)
+  
+  # this_col as name of first button
+  cat("\n\n####", this_col, "{.tabset .tabset-fade .tabset-pills}\n\n")
+  for (jj in seq_along(other_cols)) {
+    # other_cols as name of second button(s)
+    cat("\n\n#####", other_cols[jj], "\n\n")
+    # corresponding plot
+    print(plot_list[[jj]])
+  }
+}
+```
