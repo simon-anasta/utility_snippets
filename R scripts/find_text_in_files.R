@@ -20,7 +20,7 @@ setwd(FOLDER_TO_ANALYSE)
 output_df = data.frame(stringsAsFactors = FALSE)
 options(warn = -1)
 
-for(each_file in dir(recursie = TRUE)){
+for(each_file in dir(recursive = TRUE)){
   # if file has an R, SQL or SAS extension
   if(grepl("\\.R$", each_file) || grepl("\\.sql$", each_file) || grepl("\\.sas$", each_file)){
     # setup
