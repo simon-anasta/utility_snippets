@@ -12,7 +12,8 @@ list_of_packages = c(
   "rlang",
   "purrr",
   "testthat",
-  "rmarkdown"
+  "rmarkdown",
+  "glue"
 )
 
 
