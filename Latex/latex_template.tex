@@ -1,0 +1,174 @@
+\documentclass[a4paper,11pt]{article} 
+\usepackage{times}
+\usepackage{amssymb,amsmath,amsfonts} % enables special math fonts
+% \usepackage{graphicx} % enables importing figures
+% \usepackage{epsfig}   % enables use of .eps figures
+% \usepackage{mathtools} % enables matrices
+% \usepackage{multirow} % enables multirow cells in tables
+% \usepackage{verbatim} % enables multiline comments
+% \usepackage{natbib}   % enables bibliography
+% \usepackage{framed} % enables frames around content
+
+\setlength{\textwidth}{140mm}
+\setlength{\topmargin}{5mm}
+%\setlength{\textheight}{240mm}
+\setlength{\textheight}{245mm}
+\setlength{\parskip}{3mm}
+\setlength{\parindent}{0em}
+\voffset = -2cm\hoffset 0cm
+%\voffset = -2cm\hoffset -2cm
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+\title{Some Example Latex}
+\author{Simon Anastasiadis}
+\date{\today}
+\maketitle
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section*{This kind of title does not have a number}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{This kind of title does}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsection{A subtitle}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\subsubsection{A subsubtitle}
+
+You need to leave a new line to create a paragraph break.
+This will not create a new paragraph.
+
+This will.
+
+% This is a comment and will not appear in your document
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Latex and Shells}
+
+If you are working in Windows you will probably want to download an install MikTex (not sure what the Latex versions for other operating systems are called).
+
+Latex can be programmed in any shell. I use Winshell because it is designed for latex. It includes several help bars for commonly used characters and symbols (useful when you are learning) and well as a button for compiling Latex to PDF.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Some different Math modes}
+
+Dollar signs start and end in-line math notations: $O(n^2) \leq O(m^{0.55} n^{1.45})$.
+
+Full line equations are formatted as follows:
+\[
+\text{overlap}(x,y) = \frac{x^T y}{\min ( |x|_2^2 , |y|_2^2 )}
+\]
+
+Where you have multiple equations you want to align, use the align environment. I tend to use this environment a lot for formatting calculations:
+\begin{align*}
+X &= 2 + 3 - 4 \\
+%
+&= 5 - 4 \\
+%
+&\geq 0
+\end{align*}
+Note that the \& symbol provides the point of alignment. The double back slash is a line break. If you omit the $*$ from the environment then each row is numbered as an equation.
+\begin{align}
+O(n^2 m^{0.378} q^{-0.378}) &\leq O(m^{0.55} n^{1.45}) \\
+%
+O(mq) &\leq O(m^{0.55} n^{1.45})
+\end{align}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Some useful environments}
+
+The itemize environment is useful for creating bullet points:
+\begin{itemize}
+\item Point one
+\item point two
+\begin{itemize}
+\item sub point 1
+\item sub point 2
+\end{itemize}
+\item if you really want you can customize the type of bullet point
+\end{itemize}
+
+The enumerate environment creates numbered lines of bullet points:
+\begin{enumerate}
+\item We construct the matrix adjacency matrix $A$.
+\item We then compute $A^2$ using fast matrix multiply.
+\item If any entry is zero then $G$ is not shallow.
+\end{enumerate}
+You can nest itemize and enumerate inside one-another at least 3 times (maybe more).
+
+The tabbing environment is useful for manual alignment of lines. You will probably not use this very often, here I use it to format a function. Sometimes I use this in place of the align environment.
+\begin{tabbing}
+Map $\forall a_i$, \= $\forall (a_{ij}, a_{ik}) \in a_i$ \\
+\> with probability $\min( \gamma / \min( |a_j|_2^2, |a_k|_2^2 ) , 1)$ \\
+\> Emit $(j,k) \rightarrow a_{ij} a_{ik}$ \\
+
+Reduce $((j,k),<v_1, ..., v_n>)$ \\
+\> count $= \sum_i v_i$ \\
+\> Emit $(j,k) \rightarrow \text{count}$
+\end{tabbing}
+Another environment useful for formatting functions / programming is the verbatim environment. This environment prints out the exact characters you type in. No special formatting.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Bold, italic and math}
+
+Special characters have their command / functional meaning unless preceded by a backslash. So \$ produces a dollar sign. Most special keyboard symbols are command characters in latex.
+
+Curly brackets: $\{$ and $\}$ are used to keep something all as one part. Compare the following: $a_{i,j}$ and $a_i,j$. In math mode white space makes no different to the latex compiler, it only helps for readability: $a_{ i  ,  j } = a_{i,j}$ except where it comes to command characters (like \_ ).
+
+For {\bf bold} text do this.
+
+For {\it italic} text do this.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Tables and matrices}
+
+Tables are their own environment.
+
+\begin{tabular}{lcr|r}
+left aligned & centered & right aligned & right aligned \\
+\hline \\
+1 & 2 & 3 & 4 \\
+100 & 200 & 300 & 400 \\
+0.0001 & 0.0002 & 0.0003 & 0.0004 \\
+\hline
+\end{tabular}
+
+Matrices are also their own environment:
+\[
+A = \left( \begin{array}{cc}
+1 & 0 \\
+0 & 1 \end{array} \right)
+\]
+This needs to be nested inside a maths environment.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Images}
+
+The easiest way to include images is to have them in the same directory as your latex file.
+
+I tend to use the command (commented out because I have no image):
+% \centerline{\includegraphics[width=80mm]{Q2d.png}}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Warnings and Errors}
+
+When Latex compiles it will tell you about errors, warnings, underfull and overfull boxes.
+\begin{itemize}
+\item Errors are things that need to be fixed for your latex syntax to be correct. Often Latex will guess what you intended and tell you that it has inserted extra characters etc. This is so that it will compile, latex is not good at fixing your script for you.
+\item Warnings can often be ignored.
+\item Underfull boxes are paragraphs where latex has not been able to justify the paragraph nicely. And a line is too short. If you are concerned about the visual appearance of your paragraphs you may wish to reword them.
+\item Overfull boxes are paragraphs where latex has not been able to justify the paragraph nicely. And a line is too long. If you are concerned about the visual appearance of your paragraphs you may wish to reword them.
+\end{itemize}
+
+Most often I get overfull boxes when I write very long lines of math. Too long to fit on a single line:
+\[
+1 + 2 + 3 + 4 + 5 + 6 + 7 + 8 + 9 + 10 + 11 + 12 + 13 + 14 + 15 + 16 + 17 + 18 + 19 + 20 + 21 + 22 + 23 + 24 + 25
+\]
+Notice how this line extends beyond the end of the previous paragraph. Latex does not like this.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\end{document} 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
