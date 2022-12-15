@@ -4,6 +4,8 @@
 # Simon Anastasiadis
 #
 # Instructions:
+# Press Ctrl + Shift + F10
+# to reset R
 # Press Ctrl + Shift + S or click Source
 # to run the helper
 #
@@ -101,7 +103,7 @@ options(warn = 0)
 output_dir = selectDirectory(
   caption = "Select location to save",
   label = "Select",
-  path = getActiveProject()
+  path = input_dir
 )
 
 file_name = paste0(output_dir, "/simple code check", as.character(Sys.time()), ".csv")
