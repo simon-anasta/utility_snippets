@@ -85,15 +85,15 @@ app1 = shinyApp(ui = ui, server = server)
 
 ###############################################################################
 # Version 2
-# Select ita UI otpt
+# SelectInput and UI output
 #
 # Notes:
 #
 # We do not have to generate the widgets within DT using a special function.
 # It is sufficient to generate them and convert them to character.
 #
-# Binding DT wigets to shiny also connects to output. In version 1 we only
-# has shiny inpus within the DT data table. But in version 2 we ave both
+# Binding DT widgets to shiny also connects to output. In version 1 we only
+# has shiny inputs within the DT data table. But in version 2 we ave both
 # an input n an output.
 ###############################################################################
 
