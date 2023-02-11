@@ -2,6 +2,9 @@
 # Version 1
 # Buttons
 #
+# Reference:
+# https://stackoverflow.com/questions/55034483/shiny-widgets-in-dt-table
+#
 # Notes:
 # 
 # Buttons are made as text.
@@ -85,6 +88,7 @@ app1 = shinyApp(ui = ui, server = server)
 # Select ita UI otpt
 #
 # Notes:
+#
 # We do not have to generate the widgets within DT using a special function.
 # It is sufficient to generate them and convert them to character.
 #
