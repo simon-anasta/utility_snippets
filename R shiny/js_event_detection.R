@@ -5,6 +5,9 @@
 # Add an observer, and within the observer condition on
 # the ID that is returned.
 #
+# Warning, can detect many other things you do not want detected.
+# Such as conditional panels and widget creation. Use with extreme care.
+#
 # References:
 # https://www.r-bloggers.com/2021/01/adding-action-buttons-in-rows-of-dt-data-table-in-r-shiny/
 # https://stackoverflow.com/questions/72061061/on-click-for-shiny-inputs-to-get-last-input-clicked-doesnt-work-for-selectinput
