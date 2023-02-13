@@ -51,7 +51,7 @@ server <- function(input, output, session) {
 shinyApp(ui = ui, server = server)
 
 ################################################################################
-# Version 1 - selectInput
+# Version 2 - selectInput
 #
 # Building on the version above, we would like the same functionality for
 # drop down menus (selectInput and shinyWidgets::pickerInput). However,
@@ -134,3 +134,36 @@ server <- function(input, output, session) {
 # Run the application
 shinyApp(ui = ui, server = server)
 
+################################################################################
+# Version 3 - with callbacks
+#
+# The above versions require some manual creation of widgets via HTML code.
+# This is unelegant and adds additional complexity.
+#
+# However, we can add callbacks to buttons and selectizeInput that eliminate
+# the need to do this. This result is far superior and our prefered approach.
+
+library(shiny)
+
+js_assign = 'function get_id(clicked_id) {
+     Shiny.setInputValue("current_id", clicked_id, {priority: "event"});
+};'
+
+ui = fluidPage(
+  tags$head(tags$script(HTML(js_assign))),
+  selectizeInput(
+    "yes",
+    "Yes",
+    choices = c("a", "b"),
+    options = list(onChange = I("function(value) { get_id(this.$input.attr('id')); }")) ### callback as option
+  ),
+  actionButton("waiting", "Waiting", onclick = "get_id(this.id)"), ### callback
+  p(strong("has selectizeInput been changed yet:")),
+  textOutput("last_clicked"),
+)
+
+server <- function(input, output, session) {
+  output$last_clicked = renderText({ input$current_id })
+}
+
+shinyApp(ui = ui, server = server)
