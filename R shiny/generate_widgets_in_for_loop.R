@@ -18,6 +18,9 @@
 # We note one addition to this. Things that exist before iteration may need
 # to be excluded from the local.
 #
+# See also redraw_of_dynamic_datatable.R for additional concerns to incorporate
+# when the data table is draw more than once while the app is running.
+#
 # To demonstrate, contrast the following:
 # 1) code run as is
 # 2) code run with local commented out (lines 51 & 70)
@@ -98,45 +101,3 @@ server = function(input, output, session) {
 
 # run
 shinyApp(ui, server)
-
-###############################################################################
-# Additional notes
-#
-# If we were to redraw the data table above (e.g. add a 'redraw button),
-# then the app would fail.
-# 
-# This is because, outputs (like `output[[this_ui_type]]`) would be defined
-# twice (once in each draw of the table).
-#
-# There are two solutions to this.
-# 1) Unbind outputs by assigning as NULL
-# 2) Check for existence prior to assignment
-#
-# In practice, both would be advised to ensure the most robust & stable app.
-# Note that (2) by itself is a risk for long running apps where a large number
-# of outputs could be created, but then sit idle.
-#
-# Reference:
-# https://github.com/rstudio/shiny/issues/1989
-#
-# Example of option 1:
-# for(ii in 1:2){
-#   local({
-#     ii = ii
-#     output[[paste0("dyn_ui_type_", ii)]] = NULL
-#     output[[paste0("dyn_ui_aux_", ii)]] = NULL
-#     output[[paste0("dyn_select_type_", ii)]] = NULL
-#     output[[paste0("dyn_select_aux_", ii)]] = NULL
-#   })
-# }
-#
-# Example of option 2:
-# if(this_ui_type %not_in% names(output)){
-# output[[this_ui_type]] = renderUI({
-#   ref = unique(aRV$lookup_ref$column_type)
-#   choices = c("", ref)
-#   names(choices) = c("Select column type", ref)
-#   selectizeInput(ns(this_select_type), label = NULL, choices = choices, selected = "Unweighted count") 
-# })
-# }
-
