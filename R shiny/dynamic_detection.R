@@ -56,3 +56,55 @@ server <- function(input, output, session) {
 }
 
 shinyApp(ui, server)
+
+####################################################
+# app 2
+# detection across different types of widgets
+
+# Detect an arbitrary number of inputs
+
+library(shiny)
+
+ui <- fluidPage(
+  numericInput("num1", "Numeric", 0),
+  textInput("text1", "Text"),
+  selectInput("select1", "Select", choices = LETTERS[1:4]),
+  selectInput("selectize1", "Selectize", choices = letters[1:4]),
+  hr(),
+  textOutput("textout"),
+  hr()
+)
+
+# returns a list of all the inputs
+access_func = function(input, ids) {
+  num = 1:length(ids)
+  lapply(num, function(x){input[[ids[x]]]})
+}
+
+
+server <- function(input, output, session) {
+  
+  rv = reactiveValues(
+    current = c("0", "", "A", "a"),
+    ids = c("num1", "text1", "select1", "selectize1"),
+    out = "none yet"
+  )
+  
+  # observeEvent({list(input$num1, input$text1, input$select1, input$selectize1)},{
+  observeEvent({access_func(input, rv$ids)},{
+    new = unlist(access_func(input, rv$ids), use.names = FALSE)
+    change = which(rv$current != new)[1] # if multiple take the first one
+    rv$out = rv$ids[change]
+    rv$current = new
+  }, ignoreInit = TRUE)
+  
+  
+  output$textout <- renderText({
+    rv$out
+  })
+}
+
+shinyApp(ui, server)
+
+
+
