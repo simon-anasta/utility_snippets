@@ -13,7 +13,9 @@ list_of_packages = c(
   "purrr",
   "testthat",
   "rmarkdown",
-  "glue"
+  "glue",
+  "devtools",
+  "usethis"
 )
 
 
