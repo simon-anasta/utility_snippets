@@ -20,10 +20,10 @@
 
 # option 1: set to NA (no quotes), R will open a file selection window for you to choose file
 # option 2: enter path (within quotes), if copying from Windows, replace \ with /
-INSTRUCTIONS_FILE = "I:/MAA2023-55/Supporting R resources/sql_files_to_run.xlsx"
+INSTRUCTIONS_FILE = "/nas/DataLab/MAA/MAA2023-46/social investment FVSV/Resources/sql_files_to_run.xlsx"
 
 # start running at 7pm and stop at 6am (overrides DELAY_MINUTES)
-NIGHT_MODE = FALSE
+NIGHT_MODE = TRUE
 # manually set the number of minutes to wait
 DELAY_MINUTES = 90
 
@@ -47,7 +47,7 @@ USE_INTERUPT_FILE = FALSE
 
 connection_string = "DRIVER=ODBC Driver 18 for SQL Server; Trusted_Connection=Yes; TrustServerCertificate=Yes; "
 connection_string = paste0(connection_string, "DATABASE=IDI_Clean_202406; ")
-connection_string = paste0(connection_string, "SERVER=XXXXXXXX, PORTNUM")
+connection_string = paste0(connection_string, "SERVER=_SERVER_NAME_HERE_, _PORT_NUMBER_HERE_")
 
 # confirm connection works
 stopifnot(DBI::dbCanConnect(odbc::odbc(), .connection_string = connection_string))
@@ -200,7 +200,11 @@ read_and_prepare_sql_code = function(file_name_and_path){
   # \n = new line
   # So this searches for the pattern go on a line by itself
   # Where a comment starts before it and ends after it.
-  sql_code = gsub('/\\*((?:[^*]|\\*[^/])*)\ngo\n((?:[^/]|/[^\\*])*)\\*/', '/*\\1\n_g_o_\n\\2*/', sql_code)
+  in_code = ""
+  while(sql_code != in_code){
+    in_code = sql_code
+    sql_code = gsub('/\\*((?:[^*]|\\*[^/])*)\ngo\n((?:[^/]|/[^\\*])*)\\*/', '/*\\1\n_g_o_\n\\2*/', in_code)
+  }
   
   # break into batches
   sql_code = strsplit(sql_code, "\ngo")
@@ -340,7 +344,10 @@ run_sql_files_tool = function(
       tryCatch(
         # try
         {
-          result = DBI::dbExecute(db_connection, this_code)
+          # prefix nocount
+          this_code = paste("set nocount on;\n", this_code)
+          
+          result = DBI::dbExecute(db_connection, this_code, immediate = TRUE)
           any_failure = 0
         },
         # catch
@@ -402,12 +409,9 @@ run_sql_files_tool(
 #' read_and_prepare_sql_code batches code
 #' read_and_prepare_sql_code produces start and end line numbers
 #' 
-#' KNOWN ISSUES
-#' For some files GO that are not between comments are treated as if they were
-#' Files that this has been observed to occur on:
-#' - NEET_202406.sql
-#' - OTInteraction5yrs_202406.sql
-#' - school_moves_202406.sql
+#' Multiple GO statements within comments
 #' 
-
-
+#' KNOWN ISSUES
+#' Temporary tables created in earlier chunks may no be available in later chunks
+#' Currently testing solution: SET NOCOUNT ON; and dbExecute(immediate = TRUE)
+#' 
