@@ -75,3 +75,24 @@ try_run_file("test_nested_clustering.R")
 run_time_inform_user("----------------------------------------")
 run_time_inform_user("done")
 run_time_inform_user("----------------------------------------")
+
+## optional --------------------------------------------------------------- ----
+# check if R script is valid before executing
+
+is_valid_r_text = function(text){
+  text = as.character(text)
+  pass = tryCatch(
+    {parse(text = text); TRUE},
+    error = function(e){return(FALSE)}
+  )
+  return(pass)
+}
+
+is_valid_r_file = function(file){
+  stopifnot(file.exists(file))
+  pass = tryCatch(
+    {parse(file = file); TRUE},
+    error = function(e){return(FALSE)}
+  )
+  return(pass)
+}
