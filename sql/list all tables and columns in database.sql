@@ -25,3 +25,8 @@ LEFT JOIN sys.columns AS c
 ON t.object_id = c.object_id
 LEFT JOIN sys.types AS ty
 ON c.user_type_id = ty.user_type_id
+
+/* list termporary tables */
+SELECT name
+FROM tempdb..sysobjects
+WHERE OBJECT_ID('tempdb..' + name) IS NOT NULL
