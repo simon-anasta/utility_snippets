@@ -3,6 +3,9 @@
 # Take a GIS Shape file
 # for every region, determine all the adjacent regions / neighbours
 # 
+# Works best when input file is clipped.
+# As non-clipped areas have additional adjacenty to each other via water
+# (which is seldom what we are intersted in).
 ################################################################################
 
 # required packages
