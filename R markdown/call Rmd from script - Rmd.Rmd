@@ -1,0 +1,50 @@
+---
+title: "Example report"
+author: "Me"
+date: "2025-07-27"
+output: html_document
+---
+
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This file demonstrates calling an Rmarkdown document from an R script. It takes
+two parameters: `name` and `colour`. These are used to process the Iris dataset
+and make separate reports.
+
+
+```{r validate}
+
+# set defaults
+p_name = ifelse(is.null(params$name), "default", params$name)
+p_colour = ifelse(is.null(params$colour), "default", params$colour)
+p_size = ifelse(is.null(params$size), "default", params$size)
+  
+# show defaults
+print(p_name)
+print(p_colour)
+print(p_size)
+
+# validate
+stopifnot(p_name != "default")
+stopifnot(p_colour != "default")
+
+stopifnot(!is.na(p_colour))
+stopifnot(p_name %in% c("setosa", "versicolor", "virginica"))
+```
+
+```{r make_plot, echo = FALSE}
+data(iris)
+
+df = iris |>
+  dplyr::filter(.data$Species == p_name)
+
+plot(df$Sepal.Length, df$Sepal.Width, col = p_colour)
+
+```
+
