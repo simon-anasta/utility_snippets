@@ -18,16 +18,12 @@ readLines_utf8 = function(file_name_and_path){
       readLines(con = filecon)
     },
     warning = function(w){
+	  warning(w)
       # 'invalid input' implies not UTF-8 format
       if(grepl("invalid input", w, fixed = TRUE)){
         close(filecon)
-        warning(w)
-        msg = c(
-          
-        )
-        stop(paste(msg, collapse = "\n"))
+        stop('File not UTF8 encoded\n')
       }
-      warning(w)
     }
   )
   close(filecon)

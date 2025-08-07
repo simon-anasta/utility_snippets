@@ -4,22 +4,13 @@
 setwd("~/Network-Shares/DataLabNas/MAA")
 
 projects = c(
-  "MAA2017-60 Education system performance for preschool and schoolage children",
-  "MAA2019-92",
-  "MAA2020-37",
-  "MAA2020-47",
-  "MAA2021-60",
-  "MAA2023-28",
-  "MAA2016-23 CWM"
-  # 
-  # 
   # "MAA2023-55",
   # "MAA2023-46",
   # "MAA2023-44",
   # "MAA2020-61"
 )
 
-output_file = "/nas/DataLab/MAA/MAA2023-46/social investment FVSV/Resources/file_list.csv"
+output_file = "/nas/DataLab/MAA/MAA2023-46/file_list.csv"
 
 ## get info from every project ---------------------------------- ----
 
