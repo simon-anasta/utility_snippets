@@ -3,6 +3,10 @@ title: "Example report"
 author: "Me"
 date: "2025-07-27"
 output: html_document
+params:
+  name: NULL
+  colour: NULL
+  size: NULL
 ---
 
 
