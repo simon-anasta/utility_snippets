@@ -20,6 +20,10 @@
 #   })
 # }
 
+library(shiny)
+library(dplyr)
+library(ggplot2)
+
 outerModUI <- function(id) {
   ns <- NS(id)
   fluidPage(fluidRow(
@@ -33,8 +37,18 @@ outerMod <- function(input, output, session) {
   # callModule(innerMod, "inner")
   
   output$outer_slider <- renderUI({
-    sliderInput(session$ns("slider1"), label = "outer module slider", min = round(min(mtcars$mpg)), 
-                max = round(max(mtcars$mpg)), value = c(min(mtcars$mpg), max(mtcars$mpg), step = 1))
+    print(head(mtcars))
+    print(min(mtcars$mpg))
+    print(max(mtcars$mpg))
+    
+    sliderInput(
+      session$ns("slider1"),
+      label = "outer module slider",
+      min = round(min(mtcars$mpg)),
+      max = round(max(mtcars$mpg)),
+      value = c(round(min(mtcars$mpg)), round(max(mtcars$mpg))),
+      step = 1
+    )
   })
   
   output$outer_plot <- renderPlot({
@@ -51,6 +65,8 @@ ui <- fluidPage(
 )
 
 server <- function(input, output, session) {
+  data(mtcars)
+  
   callModule(outerMod, "outer")
   
 }
