@@ -1,5 +1,6 @@
 ################################################################################
 # Designing dynamic tiles for terms
+# VERSION 1 - superceeded by dynamic_insert_remove_ui
 # 
 # Each added tile is a button. Clicking a tile/button puts its contents into the
 # text box so it can be removed.
@@ -135,3 +136,4 @@ server <- function(input, output, session) {
 }
 
 shinyApp(ui, server)
+
