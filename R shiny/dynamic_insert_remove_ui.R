@@ -1,5 +1,6 @@
 ################################################################################
 # Designing dynamic tiles for terms
+# (2 versions: simple and module)
 # 
 # Each added tile is a button. Clicking a tile/button puts its contents into the
 # text box so it can be removed.
@@ -101,3 +102,119 @@ server <- function(input, output, session) {
 }
 
 shinyApp(ui, server)
+
+
+################################################################################
+# Converted into a module and tested
+################################################################################
+
+
+library(shiny)
+
+## dynamic button tiles - module ui --------------------------------------- ----
+
+dynamic_button_tiles_ui = function(id){
+  ns = NS(id)
+  tagList(
+    strong("Ignored terms"),
+    # div just taller than default button size
+    # needs id for insertUI
+    tags$div(id = ns("button_tiles"), style = "height: 38px;"),
+    textInput(ns("current_text"), "Term to ignore"),
+    actionButton(ns("action_add"), "Add"),
+    actionButton(ns("action_remove"), "Remove"),
+    actionButton(ns("action_remove_all"), "Remove all")
+  )
+}
+
+
+## dynamic button tiles - module server ----------------------------------- ----
+
+dynamic_button_tiles_server = function(id){
+  moduleServer(id, function(input, output, session) {
+    
+    # reactive values
+    rv = reactiveValues(
+      active_terms = list(),
+      num_term_buttons = 0
+    )
+    
+    # add button
+    observeEvent(input$action_add, {
+      req(nchar(input$current_text) > 0)
+      req(!input$current_text %in% rv$active_terms)
+      
+      rv$num_term_buttons = rv$num_term_buttons + 1
+      id = paste0("term_button_", rv$num_term_buttons)
+      
+      insertUI(
+        selector = paste0("#", session$ns("button_tiles")),
+        where = "beforeEnd",
+        ui = actionButton(session$ns(id), input$current_text)
+      )
+      
+      local({
+        btn_id = id
+        observeEvent(input[[btn_id]], {
+          updateTextInput(session, "current_text", value = rv$active_terms[[btn_id]])
+        })
+      })
+      
+      rv$active_terms[[id]] = input$current_text
+      updateTextInput(session, "current_text", value = "")
+    })
+    
+    # remove button
+    observeEvent(input$action_remove, {
+      req(nchar(input$current_text) > 0)
+      req(input$current_text %in% rv$active_terms)
+      
+      id = names(rv$active_terms)[rv$active_terms == input$current_text]
+      removeUI(selector = paste0("#", session$ns(id)))
+      
+      rv$active_terms[[id]] = NULL
+      updateTextInput(session, "current_text", value = "")
+    })
+    
+    # remove all button
+    observeEvent(input$action_remove_all, {
+      req(length(rv$active_terms) > 0)
+      
+      for(id in names(rv$active_terms)){
+        removeUI(selector = paste0("#", session$ns(id)))
+        rv$active_terms[[id]] = NULL
+      }
+    })
+
+    return(reactive({rv$active_terms}))
+  })
+}
+
+## outer app -------------------------------------------------------------- ----
+
+ui <- fluidPage(
+  dynamic_button_tiles_ui("active_terms"),
+  hr(),
+  dynamic_button_tiles_ui("active_terms2"),
+  hr(),
+  uiOutput("module_active_terms"),
+)
+
+server <- function(input, output, session) {
+  active_terms = dynamic_button_tiles_server("active_terms")
+  active_terms2 = dynamic_button_tiles_server("active_terms2")
+  
+  output$module_active_terms = renderText({
+    HTML(paste(
+      "First sub-module:",
+      paste(unlist(active_terms(), use.names = FALSE), collapse = "\n"),
+      "Second sub-module:",
+      paste(unlist(active_terms2(), use.names = FALSE), collapse = "\n"),
+      sep = "<br/>"
+    ))
+  })
+
+}
+
+shinyApp(ui = ui, server = server)
+
