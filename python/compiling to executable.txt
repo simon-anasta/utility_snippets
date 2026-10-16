@@ -1,0 +1,95 @@
+# Compiling to executable
+# 2026-10-13
+
+# Range of steps for compiling code to executable
+
+# 1) confirm required packages
+uv list # view all packages
+uv sync # uninstall all packages not required for project
+
+uv add polars numpy # add polars and numpy as required packages
+uv add --dev pyinstaller ipykernel ipython # add packages for development only (excluded from build)
+
+uv tree # review the dependency tree
+
+# 2) reinstall the project you have been developing
+uv pip install -e .
+
+# 3) test running of project
+uv run python -c "import data_specification_checker" # tests loading of module
+
+# make an execution script (launch script for application)
+# likely very similar to __main__.py
+# but imports "from module_name.app" instead of "from .app"
+# as this treats script like it lives outside module/project
+
+uv run python "folder/subfolder/execution script.py"
+
+# 4) make initial installer
+uv run pyinstaller --onedir "folder/subfolder/execution script.py"
+# this can take a while
+# --onedir means a directory with all dependencies + an executable
+# --onefile means a single executable file
+
+# 5) Test the executable
+# likely found in dist/
+# May need to run from Powershell to view error messages
+cd C:/path/module/dist/name
+./module.exe
+
+# 6) Add missed dependecies
+# assets and some packages may not be auto detected by pyinstaller
+# open 'project.spec' and edit
+# common process: run executable >> read errors >> update spec >> repeat
+
+a = Analysis(
+    # ...
+    datas=[ # ensure assets are included in build
+		(
+			"src/module/assets",
+            "module/assets",
+		)
+	],
+    hiddenimports=["fastexcel"], # ensure missed import is included in build
+    # ...
+)
+
+# 6b) convert .png into .ico
+# Windows icons are actually containers that hold multiple imaage sizes
+# uv pip install pillow
+from PIL import Image
+img = Image.open(r"src\module\assets\icon_as_png.png")
+img.save(
+    r"src\module\assets\icon_as_ico.ico",
+    format="ICO",
+    sizes = [(16,16),(24,24),(32,32),(48,48),(64,64),(128,128),(256,256),]
+)
+
+# 7) Rebuild from specification
+uv run pyinstaller module.spec
+
+# 8) Add icon and version info
+exe = EXE(
+    # ...
+    version="version_info.txt",
+    icon="src/module/assets/icon_as_ico.ico",
+    # ...
+)
+
+# 9) Enhancements
+# logging
+# hide console during execution
+exe = EXE(
+    # ...
+    console=True,
+    # ...
+)
+
+# 10) Rebuild, iterating until complete
+# Powershell build
+Remove-Item dist -Recurse -Force -ErrorAction Ignore
+Remove-Item build -Recurse -Force -ErrorAction Ignore
+uv run pyinstaller specification_checker.spec
+
+# If swapping from onedir to onefile
+# Best to go back to step 4 and run forwards

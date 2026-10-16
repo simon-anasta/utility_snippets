@@ -1,0 +1,82 @@
+# Useful keyboard shortcuts for working in VS Code
+
+# command line --------------------------------
+
+# activate the virtual environment
+(Set-ExecutionPolicy -Scope Process -ExecutionPolicy RemoteSigned) ; (& c:\path\my_module\.venv\Scripts\Activate.ps1)
+
+# install package
+uv add fastexcel
+
+# setup package under development for testing
+uv pip install -e .
+# test package
+pytest
+python -m pytest
+
+# run package as executable
+# requires __main__.py to be defined
+python -m my_module
+
+# run specific app file as executable
+python -m my_module.app
+
+# clear terminal
+clear
+# so we prefer
+clear; python -m pytest
+clear; python -m my_module
+
+
+# access settings -----------------------------
+
+Ctrl + ,
+
+# access detected problems --------------------
+
+Ctrl + Shift + M
+
+# code folding --------------------------------
+
+Create manual folding range
+Ctrl + K, Ctrl + ,
+Remove manual folding ranges
+Ctrl + K, Ctrl + .
+
+Fold current block
+Ctrl + Shift + [
+Unfold current block
+Ctrl + Shift + ]
+
+Fold all (release Ctrl in between the two commands)
+Ctrl + K Ctrl + 0
+Unfold all
+Ctrl + K Ctrl + J
+
+# testing -------------------------------------
+
+# clear console and run all tests
+clear;python -m pytest
+# clear console and run all tests with shortened error messages
+clear;python -m pytest --tb=short
+
+# run tests in a single test file
+python -m pytest .\tests\test_file_name.py
+# run a specific test in a single test file
+python -m pytest .\tests\test_file_name.py::test_function_name
+
+# Python REPL ---------------------------------
+
+Shift + Enter send code to Python REPL (Read-Evaluate-Print Loop)
+
+With setting "python.REPL.sendToNativeREPL": true we use
+Native REPL rather than command prompt.
+
+This is the closest mimic to executing console commands in RStudio.
+
+# Profiling -----------------------------------
+
+# launch profiling inspector
+python -m snakeviz .\prof\combined.prof
+
+
